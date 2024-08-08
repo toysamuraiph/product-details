@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #222222; /* Dark background color */
+            color: #ffffff; /* White text color for contrast */
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #444444; /* Darker gray container color */
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 150px; /* Adjust the width of your logo */
+            height: auto;
+        }
+        .product-image {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+        }
+        h1 {
+            color: #ffffff;
+            text-align: center;
+            margin: 0;
+        }
+        .details {
+            color: #ffffff;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://example.com/toysamurailogo-nobg.png" alt="Toy Samurai Logo">
+        </div>
+        <div class="product-image">
+            <img id="productImage" src="" alt="Product Image">
+        </div>
+        <h1 id="productTitle">Loading...</h1>
+        <div class="details">
+            <p><strong>SRP:</strong> <span id="srp">---</span></p>
+            <p><strong>Cost:</strong> <span id="cost">---</span></p>
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch product details based on SKU
+        function fetchProductDetails(sku) {
+            var url = 'https://script.google.com/macros/s/AKfycbyRk2KQ4BbfNJmwC0eS403h78ihNfAAOagV9FA1uDeq5HzANowVEpjcwcuw3FyeJ1_B/exec?sku=' + encodeURIComponent(sku);
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('productTitle').innerText = 'Error: ' + data.error;
+                        document.getElementById('srp').innerText = '---';
+                        document.getElementById('cost').innerText = '---';
+                    } else {
+                        document.getElementById('productTitle').innerText = data.ProductName || 'No Name Available';
+                        document.getElementById('srp').innerText = data.SRP || '---';
+                        document.getElementById('cost').innerText = data.Cost || '---';
+                        // If you have a product image URL, you can set it here
+                        // document.getElementById('productImage').src = 'URL_TO_PRODUCT_IMAGE';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching product details:', error);
+                    document.getElementById('productTitle').innerText = 'Error: Could not fetch data';
+                    document.getElementById('srp').innerText = '---';
+                    document.getElementById('cost').innerText = '---';
+                });
+        }
+
+        // Retrieve SKU from URL query parameters
+        var urlParams = new URLSearchParams(window.location.search);
+        var sku = urlParams.get('sku');
+        if (sku) {
+            fetchProductDetails(sku);
+        } else {
+            document.getElementById('productTitle').innerText = 'Error: SKU not found in URL';
+            document.getElementById('srp').innerText = '---';
+            document.getElementById('cost').innerText = '---';
+        }
+    </script>
+</body>
+</html>
