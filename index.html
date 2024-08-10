@@ -51,6 +51,12 @@
             margin: 5px 0;
             font-weight: 400;
         }
+        #loading-indicator {
+            font-size: 1.5em;
+            margin: 20px;
+            color: #ffffff;
+            display: none;
+        }
         @media (min-width: 768px) {
             .container {
                 max-width: 600px;
@@ -68,7 +74,11 @@
     <div class="logo">
         <img src="https://toysamuraiph.github.io/product-details/toysamurailogo-nobg.png" alt="Toy Samurai Logo">
     </div>
-    <div class="container">
+
+    <!-- Loading Indicator -->
+    <div id="loading-indicator">Loading...</div>
+
+    <div class="container" id="product-container">
         <img class="product-image" src="" alt="Product Image" id="product-image">
         <h1 id="product-name">Product Name</h1>
         <p>SRP: <span id="srp">₱0.00</span></p>
@@ -80,7 +90,11 @@
         const sku = urlParams.get('sku');
 
         if (sku) {
-            fetch(`https://script.google.com/macros/s/AKfycbzyqkyjKhd55c-swQb4ZMR_UYYlVcC8OQiAM2EAo18OzHAk_pQQhIZLhbdHBrZzGKDx/exec?sku=${sku}`)
+            // Show loading indicator and hide the product container
+            document.getElementById('loading-indicator').style.display = 'block';
+            document.getElementById('product-container').style.display = 'none';
+
+            fetch(`https://script.google.com/macros/s/AKfycbwqnvwfxuR2bKAMaG7ff-MX2JOof2pw-iZUv4LonGkRWNGrQ56E-Wzh-Vl7342XtFfZ/exec?sku=${sku}`)
             .then(response => response.json())
             .then(data => {
                 if (data) {
@@ -93,9 +107,22 @@
                     document.getElementById('srp').textContent = "-";
                     document.getElementById('cost').textContent = "-";
                 }
+
+                // Hide loading indicator and show the product container
+                document.getElementById('loading-indicator').style.display = 'none';
+                document.getElementById('product-container').style.display = 'block';
             })
             .catch(error => {
                 console.error('Error fetching product data:', error);
+                
+                // Show error message
+                document.getElementById('product-name').textContent = "Error loading product";
+                document.getElementById('srp').textContent = "-";
+                document.getElementById('cost').textContent = "-";
+
+                // Hide loading indicator and show the product container
+                document.getElementById('loading-indicator').style.display = 'none';
+                document.getElementById('product-container').style.display = 'block';
             });
         } else {
             document.getElementById('product-name').textContent = "No SKU provided";
