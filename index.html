@@ -98,7 +98,10 @@
                     document.getElementById('product-name').textContent = data.ProductName;
                     document.getElementById('srp').textContent = `₱${data.SRP}`;
                     document.getElementById('cost').textContent = `₱${data.Cost}`;
-                    document.getElementById('product-image').src = data.ImageURL;
+
+                    // Construct the URL for the product image in GitHub repository
+                    const githubBaseURL = 'https://raw.githubusercontent.com/toysamuraiph/product-details/main/product-details/Product_Images/';
+                    document.getElementById('product-image').src = githubBaseURL + encodeURIComponent(data.ProductImage);
                 } else {
                     document.getElementById('product-name').textContent = "Product not found";
                     document.getElementById('srp').textContent = "-";
