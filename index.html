@@ -51,12 +51,6 @@
             margin: 5px 0;
             font-weight: 400;
         }
-        #loading-indicator {
-            font-size: 1.5em;
-            margin: 20px;
-            color: #ffffff;
-            display: none;
-        }
         @media (min-width: 768px) {
             .container {
                 max-width: 600px;
@@ -68,17 +62,20 @@
                 font-size: 1.5em;
             }
         }
+        .loading {
+            display: none;
+            font-size: 1.5em;
+            color: #ffffff;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="logo">
         <img src="https://toysamuraiph.github.io/product-details/toysamurailogo-nobg.png" alt="Toy Samurai Logo">
     </div>
-
-    <!-- Loading Indicator -->
-    <div id="loading-indicator">Loading...</div>
-
-    <div class="container" id="product-container">
+    <div class="container">
+        <div class="loading" id="loading">Loading...</div>
         <img class="product-image" src="" alt="Product Image" id="product-image">
         <h1 id="product-name">Product Name</h1>
         <p>SRP: <span id="srp">₱0.00</span></p>
@@ -86,46 +83,35 @@
     </div>
 
     <script>
+        document.getElementById('loading').style.display = 'block'; // Show loading indicator
+
         const urlParams = new URLSearchParams(window.location.search);
         const sku = urlParams.get('sku');
 
         if (sku) {
-            // Show loading indicator and hide the product container
-            document.getElementById('loading-indicator').style.display = 'block';
-            document.getElementById('product-container').style.display = 'none';
-
-            fetch(`https://script.google.com/macros/s/AKfycbwqnvwfxuR2bKAMaG7ff-MX2JOof2pw-iZUv4LonGkRWNGrQ56E-Wzh-Vl7342XtFfZ/exec?sku=${sku}`)
+            fetch(`https://script.google.com/macros/s/AKfycbzyqkyjKhd55c-swQb4ZMR_UYYlVcC8OQiAM2EAo18OzHAk_pQQhIZLhbdHBrZzGKDx/exec?sku=${sku}`)
             .then(response => response.json())
             .then(data => {
                 if (data) {
                     document.getElementById('product-name').textContent = data.ProductName;
                     document.getElementById('srp').textContent = `₱${data.SRP}`;
                     document.getElementById('cost').textContent = `₱${data.Cost}`;
-                    document.getElementById('product-image').src = `https://toysamuraiph.github.io/product-details/images/${sku}.png`;
+                    document.getElementById('product-image').src = data.ImageURL;
                 } else {
                     document.getElementById('product-name').textContent = "Product not found";
                     document.getElementById('srp').textContent = "-";
                     document.getElementById('cost').textContent = "-";
                 }
-
-                // Hide loading indicator and show the product container
-                document.getElementById('loading-indicator').style.display = 'none';
-                document.getElementById('product-container').style.display = 'block';
+                document.getElementById('loading').style.display = 'none'; // Hide loading indicator
             })
             .catch(error => {
                 console.error('Error fetching product data:', error);
-                
-                // Show error message
                 document.getElementById('product-name').textContent = "Error loading product";
-                document.getElementById('srp').textContent = "-";
-                document.getElementById('cost').textContent = "-";
-
-                // Hide loading indicator and show the product container
-                document.getElementById('loading-indicator').style.display = 'none';
-                document.getElementById('product-container').style.display = 'block';
+                document.getElementById('loading').style.display = 'none'; // Hide loading indicator
             });
         } else {
             document.getElementById('product-name').textContent = "No SKU provided";
+            document.getElementById('loading').style.display = 'none'; // Hide loading indicator
         }
     </script>
 </body>
