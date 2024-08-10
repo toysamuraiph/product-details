@@ -68,6 +68,11 @@
             color: #ffffff;
             margin-top: 20px;
         }
+        .debug-info {
+            margin-top: 20px;
+            font-size: 1em;
+            color: #ffcccc;
+        }
     </style>
 </head>
 <body>
@@ -80,6 +85,9 @@
         <h1 id="product-name">Product Name</h1>
         <p>SRP: <span id="srp">₱0.00</span></p>
         <p>Cost: <span id="cost">₱0.00</span></p>
+        <div class="debug-info">
+            <p>Fetching Image URL: <span id="image-url"></span></p>
+        </div>
     </div>
 
     <script>
@@ -89,7 +97,9 @@
         const sku = urlParams.get('sku');
 
         if (sku) {
-            fetch(`https://script.google.com/macros/s/AKfycbzUrXdSWt4_TQY4bmBBwkQ8difmX1QHHUwnIvpTs6ca7knKCbPrk2QTYCHAhvl-XfzV/exec?sku=${sku}`)
+            const scriptUrl = `https://script.google.com/macros/s/AKfycbzyqkyjKhd55c-swQb4ZMR_UYYlVcC8OQiAM2EAo18OzHAk_pQQhIZLhbdHBrZzGKDx/exec?sku=${sku}`;
+
+            fetch(scriptUrl)
             .then(response => response.json())
             .then(data => {
                 if (data) {
@@ -97,6 +107,9 @@
                     document.getElementById('srp').textContent = `₱${data.SRP}`;
                     document.getElementById('cost').textContent = `₱${data.Cost}`;
                     document.getElementById('product-image').src = data.ImageURL;
+
+                    // Display the fetched image URL for debugging
+                    document.getElementById('image-url').textContent = data.ImageURL;
                 } else {
                     document.getElementById('product-name').textContent = "Product not found";
                     document.getElementById('srp').textContent = "-";
