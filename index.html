@@ -89,7 +89,7 @@
         const sku = urlParams.get('sku');
 
         if (sku) {
-            fetch(`https://script.google.com/macros/s/AKfycbzyqkyjKhd55c-swQb4ZMR_UYYlVcC8OQiAM2EAo18OzHAk_pQQhIZLhbdHBrZzGKDx/exec?sku=${sku}`)
+            fetch(`https://script.google.com/macros/s/AKfycbzUrXdSWt4_TQY4bmBBwkQ8difmX1QHHUwnIvpTs6ca7knKCbPrk2QTYCHAhvl-XfzV/exec?sku=${sku}`)
             .then(response => response.json())
             .then(data => {
                 if (data) {
