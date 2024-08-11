@@ -18,7 +18,7 @@
             min-height: 100vh;
         }
         .logo {
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* Reduced margin for less space between logo and container */
         }
         .logo img {
             max-width: 150px;
@@ -67,6 +67,15 @@
             font-size: 1.5em;
             color: #ffffff;
             margin-top: 20px;
+            animation: rotate 1.5s linear infinite; /* Rotating animation */
+        }
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
@@ -98,7 +107,7 @@
                     document.getElementById('product-name').textContent = data.ProductName;
                     document.getElementById('srp').textContent = `₱${data.SRP}`;
                     document.getElementById('cost').textContent = `₱${data.Cost}`;
-                    
+
                     // Use the complete URL directly for the product image
                     document.getElementById('product-image').src = data.ProductImage;
                 } else {
