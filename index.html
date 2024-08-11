@@ -18,7 +18,7 @@
             min-height: 100vh;
         }
         .logo {
-            margin-bottom: 5px; /* Further reduced margin for less space between logo and container */
+            margin-bottom: 5px; /* Reduced margin for less space between logo and container */
         }
         .logo img {
             max-width: 150px;
@@ -41,6 +41,7 @@
             height: auto;
             margin-bottom: 20px;
             border-radius: 8px;
+            display: none; /* Initially hide the product image */
         }
         h1, p {
             display: none; /* Hide content initially */
@@ -114,6 +115,7 @@
                     document.getElementById('product-name').style.display = 'block';
                     document.getElementById('srp').parentNode.style.display = 'block';
                     document.getElementById('cost').parentNode.style.display = 'block';
+                    document.getElementById('product-image').style.display = 'block'; // Show the product image
                 } else {
                     document.getElementById('product-name').textContent = "Product not found";
                     document.getElementById('srp').textContent = "-";
