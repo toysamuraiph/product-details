@@ -18,7 +18,7 @@
             min-height: 100vh;
         }
         .logo {
-            margin-bottom: 2px; /* Further reduced margin for less space between logo and container */
+            margin-bottom: 2px; /* Reduced margin for less space between logo and container */
         }
         .logo img {
             max-width: 150px;
@@ -35,6 +35,7 @@
             text-align: center;
             margin: 20px;
             position: relative; /* Added to center the loader within the container */
+            display: none; /* Hide container until authenticated */
         }
         .product-image {
             max-width: 100%;
@@ -85,7 +86,7 @@
     <div class="logo">
         <img src="https://toysamuraiph.github.io/product-details/toysamurailogo-nobg.png" alt="Toy Samurai Logo">
     </div>
-    <div class="container">
+    <div class="container" id="container">
         <div class="loading" id="loading"></div> <!-- Circular loader centered in the container -->
         <img class="product-image" src="" alt="Product Image" id="product-image">
         <h1 id="product-name">Product Name</h1>
@@ -94,46 +95,61 @@
     </div>
 
     <script>
-        document.getElementById('loading').style.display = 'block'; // Show loading indicator
+        // Universal password for access
+        const PASSWORD = 'yourpassword'; // Set your password here
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const sku = urlParams.get('sku');
+        function authenticate() {
+            const enteredPassword = prompt("Please enter the password:");
+            return enteredPassword === PASSWORD;
+        }
 
-        if (sku) {
-            const scriptUrl = `https://script.google.com/macros/s/AKfycbwXB6JtZKoJvIWjPyb3dvI16-qO4KQTDEpDAsPvY280xGuY421AD_7vCNIq1IScYOlb/exec?sku=${sku}`;
+        if (authenticate()) {
+            document.getElementById('loading').style.display = 'block'; // Show loading indicator
 
-            fetch(scriptUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (data) {
-                    document.getElementById('product-name').textContent = data.ProductName;
-                    document.getElementById('srp').textContent = `₱${data.SRP}`;
-                    document.getElementById('cost').textContent = `₱${data.Cost}`;
-                    document.getElementById('product-image').src = data.ProductImage;
+            const urlParams = new URLSearchParams(window.location.search);
+            const sku = urlParams.get('sku');
 
-                    // Show content once data is loaded
+            if (sku) {
+                const scriptUrl = `https://script.google.com/macros/s/AKfycbwXB6JtZKoJvIWjPyb3dvI16-qO4KQTDEpDAsPvY280xGuY421AD_7vCNIq1IScYOlb/exec?sku=${sku}`;
+
+                fetch(scriptUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        document.getElementById('product-name').textContent = data.ProductName;
+                        document.getElementById('srp').textContent = `₱${data.SRP}`;
+                        document.getElementById('cost').textContent = `₱${data.Cost}`;
+                        document.getElementById('product-image').src = data.ProductImage;
+
+                        // Show content once data is loaded
+                        document.getElementById('product-name').style.display = 'block';
+                        document.getElementById('srp').parentNode.style.display = 'block';
+                        document.getElementById('cost').parentNode.style.display = 'block';
+                        document.getElementById('product-image').style.display = 'block'; // Show the product image
+                    } else {
+                        document.getElementById('product-name').textContent = "Product not found";
+                        document.getElementById('srp').textContent = "-";
+                        document.getElementById('cost').textContent = "-";
+                        document.getElementById('product-name').style.display = 'block';
+                    }
+                    document.getElementById('loading').style.display = 'none'; // Hide loading indicator
+                })
+                .catch(error => {
+                    console.error('Error fetching product data:', error);
+                    document.getElementById('product-name').textContent = "Error loading product";
+                    document.getElementById('loading').style.display = 'none'; // Hide loading indicator
                     document.getElementById('product-name').style.display = 'block';
-                    document.getElementById('srp').parentNode.style.display = 'block';
-                    document.getElementById('cost').parentNode.style.display = 'block';
-                    document.getElementById('product-image').style.display = 'block'; // Show the product image
-                } else {
-                    document.getElementById('product-name').textContent = "Product not found";
-                    document.getElementById('srp').textContent = "-";
-                    document.getElementById('cost').textContent = "-";
-                    document.getElementById('product-name').style.display = 'block';
-                }
-                document.getElementById('loading').style.display = 'none'; // Hide loading indicator
-            })
-            .catch(error => {
-                console.error('Error fetching product data:', error);
-                document.getElementById('product-name').textContent = "Error loading product";
+                });
+            } else {
+                document.getElementById('product-name').textContent = "No SKU provided";
                 document.getElementById('loading').style.display = 'none'; // Hide loading indicator
                 document.getElementById('product-name').style.display = 'block';
-            });
+            }
+
+            document.getElementById('container').style.display = 'block'; // Show container
         } else {
-            document.getElementById('product-name').textContent = "No SKU provided";
-            document.getElementById('loading').style.display = 'none'; // Hide loading indicator
-            document.getElementById('product-name').style.display = 'block';
+            alert("Incorrect password. Access denied.");
+            document.body.innerHTML = ""; // Clear the body content
         }
     </script>
 </body>
