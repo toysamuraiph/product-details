@@ -96,10 +96,26 @@
 
     <script>
         const correctPassword = 'MBSamurai28!';
+        const authKey = 'authenticated';
+        const authDuration = 18 * 60 * 60 * 1000; // 18 hours in milliseconds
 
         function authenticate() {
-            const enteredPassword = prompt("Please enter the password:");
-            return enteredPassword === correctPassword;
+            const storedTimestamp = localStorage.getItem('authTimestamp');
+            const now = new Date().getTime();
+
+            if (storedTimestamp && (now - storedTimestamp) < authDuration) {
+                return true; // Already authenticated
+            } else {
+                const enteredPassword = prompt("Please enter the password:");
+                if (enteredPassword === correctPassword) {
+                    localStorage.setItem('authTimestamp', now);
+                    return true;
+                } else {
+                    alert("Incorrect password. Access denied.");
+                    document.body.innerHTML = ""; // Clear the body content
+                    return false;
+                }
+            }
         }
 
         if (authenticate()) {
@@ -146,9 +162,6 @@
             }
 
             document.getElementById('container').style.display = 'block'; // Show container
-        } else {
-            alert("Incorrect password. Access denied.");
-            document.body.innerHTML = ""; // Clear the body content
         }
     </script>
 </body>
