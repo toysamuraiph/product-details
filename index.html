@@ -95,17 +95,11 @@
     </div>
 
     <script>
-        // Obfuscated password
-        const encodedPassword = 'TUIyU2FtdXJhaTI4IQ=='; // Base64 encoded 'MBSamurai28!'
-
-        function decodePassword(encoded) {
-            return atob(encoded);
-        }
+        const correctPassword = 'MBSamurai28!';
 
         function authenticate() {
-            const password = decodePassword(encodedPassword);
             const enteredPassword = prompt("Please enter the password:");
-            return enteredPassword === password;
+            return enteredPassword === correctPassword;
         }
 
         if (authenticate()) {
