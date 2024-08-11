@@ -95,12 +95,17 @@
     </div>
 
     <script>
-        // Universal password for access
-        const PASSWORD = 'yourpassword'; // Set your password here
+        // Obfuscated password
+        const encodedPassword = 'TUIyU2FtdXJhaTI4IQ=='; // Base64 encoded 'MBSamurai28!'
+
+        function decodePassword(encoded) {
+            return atob(encoded);
+        }
 
         function authenticate() {
+            const password = decodePassword(encodedPassword);
             const enteredPassword = prompt("Please enter the password:");
-            return enteredPassword === PASSWORD;
+            return enteredPassword === password;
         }
 
         if (authenticate()) {
