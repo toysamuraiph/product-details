@@ -230,12 +230,22 @@
                         QuantitySold: 1 // Fixed quantity to 1
                     };
 
-                    google.script.run
-                        .withSuccessHandler(response => {
-                            alert(response.message);
-                            document.getElementById('form-container').reset();
-                        })
-                        .recordSale(saleData);
+                    fetch('https://script.google.com/macros/s/AKfycbyUVG33WiH60K1jRJj7qpjX3y65OGmV_6XCy4JEpSozQgGprr-syCBorC4dMkE7vvUr1A/exec', { // Replace with your actual endpoint
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(saleData)
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        alert('Sale recorded successfully!');
+                        document.getElementById('form-container').reset();
+                    })
+                    .catch(error => {
+                        console.error('Error recording sale:', error);
+                        alert('Error recording sale.');
+                    });
                 } else {
                     alert('Please enter the sale price.');
                 }
