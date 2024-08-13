@@ -37,34 +37,62 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(scriptUrl)
             .then(response => response.json())
             .then(data => {
-                if (data) {
-                    document.getElementById('product-name').textContent = data.ProductName;
-                    document.getElementById('srp').textContent = `₱${data.SRP}`;
-                    document.getElementById('cost').textContent = `₱${data.Cost}`;
-                    document.getElementById('product-image').src = data.ProductImage;
+                const productNameElement = document.getElementById('product-name');
+                const srpElement = document.getElementById('srp');
+                const costElement = document.getElementById('cost');
+                const productImageElement = document.getElementById('product-image');
 
-                    document.getElementById('product-name').style.display = 'block';
-                    document.getElementById('srp').parentNode.style.display = 'block';
-                    document.getElementById('cost').parentNode.style.display = 'block';
-                    document.getElementById('product-image').style.display = 'block';
+                if (data && productNameElement && srpElement && costElement && productImageElement) {
+                    productNameElement.textContent = data.ProductName;
+                    srpElement.textContent = `₱${data.SRP}`;
+                    costElement.textContent = `₱${data.Cost}`;
+                    productImageElement.src = data.ProductImage;
+
+                    productNameElement.style.display = 'block';
+                    srpElement.parentNode.style.display = 'block';
+                    costElement.parentNode.style.display = 'block';
+                    productImageElement.style.display = 'block';
                 } else {
-                    document.getElementById('product-name').textContent = "Product not found";
-                    document.getElementById('srp').textContent = "-";
-                    document.getElementById('cost').textContent = "-";
-                    document.getElementById('product-name').style.display = 'block';
+                    if (productNameElement) {
+                        productNameElement.textContent = "Product not found";
+                        productNameElement.style.display = 'block';
+                    }
+                    if (srpElement) {
+                        srpElement.textContent = "-";
+                        srpElement.parentNode.style.display = 'block';
+                    }
+                    if (costElement) {
+                        costElement.textContent = "-";
+                        costElement.parentNode.style.display = 'block';
+                    }
+                    if (loadingElement) {
+                        loadingElement.style.display = 'none';
+                    }
                 }
-                loadingElement.style.display = 'none';
+                if (loadingElement) {
+                    loadingElement.style.display = 'none';
+                }
             })
             .catch(error => {
                 console.error('Error fetching product data:', error);
-                document.getElementById('product-name').textContent = "Error loading product";
-                loadingElement.style.display = 'none';
-                document.getElementById('product-name').style.display = 'block';
+                const productNameElement = document.getElementById('product-name');
+                if (productNameElement) {
+                    productNameElement.textContent = "Error loading product";
+                    productNameElement.style.display = 'block';
+                }
+                if (loadingElement) {
+                    loadingElement.style.display = 'none';
+                }
             });
         } else {
-            document.getElementById('product-name').textContent = "No SKU provided";
-            loadingElement.style.display = 'none';
-            document.getElementById('product-name').style.display = 'block';
+            const productNameElement = document.getElementById('product-name');
+            if (productNameElement) {
+                productNameElement.textContent = "No SKU provided";
+                productNameElement.style.display = 'block';
+            }
+            if (loadingElement) {
+                loadingElement.style.display = 'none';
+            }
         }
 
         const containerElement = document.getElementById('container');
