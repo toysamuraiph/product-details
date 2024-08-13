@@ -180,7 +180,7 @@
             if (sku) {
                 const scriptUrl = `https://script.google.com/macros/s/AKfycbwXB6JtZKoJvIWjPyb3dvI16-qO4KQTDEpDAsPvY280xGuY421AD_7vCNIq1IScYOlb/exec?sku=${sku}`;
 
-                fetch(scriptUrl)
+                fetch(scriptUrl, { redirect: 'follow' })
                 .then(response => response.json())
                 .then(data => {
                     if (data) {
@@ -233,15 +233,15 @@
                     fetch('https://script.google.com/macros/s/AKfycbyavUh7pp2M2Hg97_Z0Jrle8eKLiEmEib6XI9Q5d9DsDuKPfLcyKXLCPp3DMVU-tNpgmw/exec', { // Replace with your actual endpoint
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'text/plain;charset=utf-8'
                         },
-                        body: JSON.stringify(saleData)
+                        body: JSON.stringify(saleData),
+                        redirect: 'follow'
                     })
-                    .then(response => response.json())
+                    .then(response => response.text())
                     .then(result => {
                         alert('Sale recorded successfully!');
-                        // Clear the input field instead of calling reset()
-                        document.getElementById('sale-price').value = '';
+                        document.getElementById('form-container').reset();
                     })
                     .catch(error => {
                         console.error('Error recording sale:', error);
