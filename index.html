@@ -224,6 +224,7 @@
 
             document.getElementById('submit-sale').addEventListener('click', () => {
                 const salePrice = document.getElementById('sale-price').value;
+                event.target.disabled = true;
 
                 if (salePrice) {
                     const saleData = {
@@ -253,6 +254,7 @@
                     });
                 } else {
                     alert('Please enter the sale price.');
+                    event.target.disabled = false;
                 }
             });
         }
