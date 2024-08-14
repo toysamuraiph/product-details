@@ -151,6 +151,7 @@
         const correctPassword = 'MBSamurai28!';
         const authKey = 'authenticated';
         const authDuration = 18 * 60 * 60 * 1000;
+        let ownerID = null;  // Declare ownerID globally
 
         function authenticate() {
             const storedTimestamp = localStorage.getItem('authTimestamp');
@@ -178,7 +179,7 @@
             const sku = urlParams.get('sku');
 
             if (sku) {
-                const scriptUrl = `https://script.google.com/macros/s/AKfycbwXB6JtZKoJvIWjPyb3dvI16-qO4KQTDEpDAsPvY280xGuY421AD_7vCNIq1IScYOlb/exec?sku=${sku}`;
+                const scriptUrl = `https://script.google.com/macros/s/AKfycbxdkm9iM97WT1nn3jI5EHP29MPYWU6kissVayWBPn6LOY9pxVLXxmjEC_cLyUYnObv-/exec?sku=${sku}`;
 
                 fetch(scriptUrl, { redirect: 'follow' })
                 .then(response => response.json())
@@ -188,6 +189,7 @@
                         document.getElementById('srp').textContent = `₱${data.SRP}`;
                         document.getElementById('cost').textContent = `₱${data.Cost}`;
                         document.getElementById('product-image').src = data.ProductImage;
+                        ownerID = data.OwnerID
 
                         document.getElementById('product-name').style.display = 'block';
                         document.getElementById('srp').parentNode.style.display = 'block';
@@ -227,21 +229,23 @@
                     const saleData = {
                         SKU: sku,
                         SalePrice: salePrice,
+                        OwnerID: ownerID,
                         QuantitySold: 1 // Fixed quantity to 1
+                        
                     };
 
-                    fetch('https://script.google.com/macros/s/AKfycbyavUh7pp2M2Hg97_Z0Jrle8eKLiEmEib6XI9Q5d9DsDuKPfLcyKXLCPp3DMVU-tNpgmw/exec', { // Replace with your actual endpoint
+                    fetch('https://script.google.com/macros/s/AKfycbzZ1SXLXrcKVp3YehqMHMDh6uaB6z1vdKa2vQ8LAvEvujIzjia17DNGkMcrXk0WALrYgQ/exec', { // Replace with your actual endpoint
                         method: 'POST',
                         headers: {
                             'Content-Type': 'text/plain;charset=utf-8'
                         },
-                        body: JSON.stringify(saleData),
-                        redirect: 'follow'
+                         body: JSON.stringify(saleData),
+                         redirect: 'follow'
                     })
                     .then(response => response.text())
                     .then(result => {
                         alert('Sale recorded successfully!');
-                        document.getElementById('form-container').reset();
+                        location.reload();
                     })
                     .catch(error => {
                         console.error('Error recording sale:', error);
