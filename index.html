@@ -139,6 +139,7 @@
         <h1 id="product-name">Product Name</h1>
         <p>SRP: <span id="srp">₱0.00</span></p>
         <p>Cost: <span id="cost">₱0.00</span></p>
+        <p>Last Price: <span id="last-price">₱0.00</span></p>
         <button class="show-form-btn" id="show-form-btn">Add Sale</button>
         <div class="form-container" id="form-container">
             <h2>Record Sale</h2>
@@ -188,17 +189,20 @@
                         document.getElementById('product-name').textContent = data.ProductName;
                         document.getElementById('srp').textContent = `₱${data.SRP}`;
                         document.getElementById('cost').textContent = `₱${data.Cost}`;
+                        document.getElementById('last-price').textContent = `₱${data.LastPrice || '0.00'}`;
                         document.getElementById('product-image').src = data.ProductImage;
-                        ownerID = data.OwnerID
+                        ownerID = data.OwnerID;
 
                         document.getElementById('product-name').style.display = 'block';
                         document.getElementById('srp').parentNode.style.display = 'block';
                         document.getElementById('cost').parentNode.style.display = 'block';
+                        document.getElementById('last-price').parentNode.style.display = 'block';
                         document.getElementById('product-image').style.display = 'block';
                     } else {
                         document.getElementById('product-name').textContent = "Product not found";
                         document.getElementById('srp').textContent = "-";
                         document.getElementById('cost').textContent = "-";
+                        document.getElementById('last-price').textContent = "-";
                         document.getElementById('product-name').style.display = 'block';
                     }
                     document.getElementById('loading').style.display = 'none';
@@ -232,16 +236,15 @@
                         SalePrice: salePrice,
                         OwnerID: ownerID,
                         QuantitySold: 1 // Fixed quantity to 1
-                        
                     };
 
-                    fetch('https://script.google.com/macros/s/AKfycbzIkpfT2SX3-sqzhggi6L1r9BfeoyxOueyeYDASTF5Ri40v_-MIEwSjiCauls-ueYXThA/exec', { // Replace with your actual endpoint
+                    fetch('https://script.google.com/macros/s/AKfycbzIkpfT2SX3-sqzhggi6L1r9BfeoyxOueyeYDASTF5Ri40v_-MIEwSjiCauls-ueYXThA/exec', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'text/plain;charset=utf-8'
                         },
-                         body: JSON.stringify(saleData),
-                         redirect: 'follow'
+                        body: JSON.stringify(saleData),
+                        redirect: 'follow'
                     })
                     .then(response => response.text())
                     .then(result => {
