@@ -18,7 +18,7 @@
             min-height: 100vh;
         }
         .logo {
-            margin-bottom: 2px;
+            margin-bottom: 20px;
         }
         .logo img {
             max-width: 150px;
@@ -43,6 +43,20 @@
             margin-bottom: 20px;
             border-radius: 8px;
             display: none;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .row label {
+            flex: 1;
+            text-align: left;
+            font-weight: bold;
+        }
+        .row span {
+            flex: 1;
+            text-align: right;
         }
         h1, p {
             display: none;
@@ -137,9 +151,24 @@
         <div class="loading" id="loading"></div>
         <img class="product-image" src="" alt="Product Image" id="product-image">
         <h1 id="product-name">Product Name</h1>
-        <p>SRP: <span id="srp">₱0.00</span></p>
-        <p>Cost: <span id="cost">₱0.00</span></p>
-        <p>Last Price: <span id="last-price">₱0.00</span></p>
+        
+        <div class="row">
+            <label>SRP:</label>
+            <span id="srp">₱0.00</span>
+        </div>
+        <div class="row">
+            <label>Last Price:</label>
+            <span id="last-price">₱0.00</span>
+        </div>
+        <div class="row">
+            <label>Cost:</label>
+            <span id="cost">₱0.00</span>
+        </div>
+        <div class="row">
+            <label>Condition ID:</label>
+            <span id="condition-id">N/A</span>
+        </div>
+
         <button class="show-form-btn" id="show-form-btn">Add Sale</button>
         <div class="form-container" id="form-container">
             <h2>Record Sale</h2>
@@ -180,7 +209,7 @@
             const sku = urlParams.get('sku');
 
             if (sku) {
-                const scriptUrl = `https://script.google.com/macros/s/AKfycbxdkm9iM97WT1nn3jI5EHP29MPYWU6kissVayWBPn6LOY9pxVLXxmjEC_cLyUYnObv-/exec?sku=${sku}`;
+                const scriptUrl = `https://script.google.com/macros/s/AKfycbw9uKtz-CT7W0UGbh5EmoqYsf89oIZ2jMV3MuQjU5A0QJLwpczjqmP9OgTinPpOrd4s/exec?sku=${sku}`;
 
                 fetch(scriptUrl, { redirect: 'follow' })
                 .then(response => response.json())
@@ -190,19 +219,22 @@
                         document.getElementById('srp').textContent = `₱${data.SRP}`;
                         document.getElementById('cost').textContent = `₱${data.Cost}`;
                         document.getElementById('last-price').textContent = `₱${data.LastPrice || '0.00'}`;
+                        document.getElementById('condition-id').textContent = data.ConditionID || 'N/A';
                         document.getElementById('product-image').src = data.ProductImage;
                         ownerID = data.OwnerID;
 
                         document.getElementById('product-name').style.display = 'block';
-                        document.getElementById('srp').parentNode.style.display = 'block';
-                        document.getElementById('cost').parentNode.style.display = 'block';
-                        document.getElementById('last-price').parentNode.style.display = 'block';
+                        document.getElementById('srp').parentNode.style.display = 'flex';
+                        document.getElementById('cost').parentNode.style.display = 'flex';
+                        document.getElementById('last-price').parentNode.style.display = 'flex';
+                        document.getElementById('condition-id').parentNode.style.display = 'flex';
                         document.getElementById('product-image').style.display = 'block';
                     } else {
                         document.getElementById('product-name').textContent = "Product not found";
                         document.getElementById('srp').textContent = "-";
                         document.getElementById('cost').textContent = "-";
                         document.getElementById('last-price').textContent = "-";
+                        document.getElementById('condition-id').textContent = "-";
                         document.getElementById('product-name').style.display = 'block';
                     }
                     document.getElementById('loading').style.display = 'none';
